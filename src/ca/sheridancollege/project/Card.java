@@ -12,16 +12,47 @@ package ca.sheridancollege.project;
  *
  * @author dancye
  */
-public abstract class Card{
+public abstract class Card {
     //default modifier for child classes
 
-//    /**
-//     * Students should implement this method for their specific children classes
-//     *
-//     * @return a String representation of a card. Could be an UNO card, a
-//     * regular playing card etc.
-//     */
-//    @Override
-//    public abstract String toString();
+    private String suit; //clubs, spades, diamonds, hearts
+    private int value;//1-13
+
+    /**
+     * @return the suit
+     */
+    public String getSuit() {
+        return suit;
+    }
+
+    /**
+     * @param suit the suit to set
+     */
+    public void setSuit(String suit) {
+        this.suit = suit;
+    }
+
+    /**
+     * @return the value
+     */
+    public int getValue() {
+        return value;
+    }
+
+    /**
+     * @param value the value to set
+     */
+    public void setValue(int value) {
+        this.value = value;
+    }
+
+    /**
+     * Students should implement this method for their specific children classes
+     *
+     * @return a String representation of a card. Could be an UNO card, a
+     * regular playing card etc.
+     */
+    @Override
+    public abstract String toString();
 
 }

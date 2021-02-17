@@ -18,34 +18,41 @@ public class GoFish extends Game {
     private int numOfPlayers;
 
     // args constructor
-    public GoFish() {
+    public GoFish(int handSize) {
         // call super class
-        super("GoFish");
+        super("GoFish", handSize);
 
     }
 
     @Override
-    /**
-     * Play the game. This might be one method or many method calls depending on
-     * your game.
-     */
     public void play() {
-        
-    }
-    
-    public void setUp() {
-        
-        System.out.println("How many players would like to play?");
-    }
-    
-    
-    @Override
-    /**
-     * When the game is over, use this method to declare and display a winning
-     * player.
-     */
-    public void declareWinner() {
 
+    }
+
+    public void setUp(String[] playerNames) {
+        for (int i = 0; i < playerNames.length; i++) {
+            
+        }
+
+    }
+
+    public void dealHands() {
+        if (this.numOfPlayers < 2) {
+            
+        }
+    }
+
+    @Override
+    public String toString() {
+        String string = "temporary";
+
+        return string;
+    }
+
+    @Override
+
+    public void declareWinner() {
+        
     }
 
 }

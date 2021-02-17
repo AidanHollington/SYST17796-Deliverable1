@@ -11,7 +11,7 @@ package ca.sheridancollege.project;
  *
  * @author dancye
  */
-public abstract class Player {
+public abstract class Player extends GroupOfCards {
 
     private String playerID; //the unique ID for this player
 
@@ -20,7 +20,8 @@ public abstract class Player {
      *
      * @param name the unique ID to assign to this player.
      */
-    public Player(String name) {
+    public Player(String name, int handSize) {
+        super(handSize);
         playerID = name;
     }
 
