@@ -13,7 +13,7 @@ import java.util.ArrayList;
  *
  * @author dancye
  */
-public abstract class Game extends Player {
+public class Game extends Player {
 
     private final String gameName;//the title of the game
     private ArrayList<Player> players;// the players of the game
@@ -50,12 +50,22 @@ public abstract class Game extends Player {
      * Play the game. This might be one method or many method calls depending on
      * your game.
      */
-    public abstract void play();
+    public void play() {
+        
+    }
 
     /**
      * When the game is over, use this method to declare and display a winning
      * player.
      */
-    public abstract void declareWinner();
+    public void declareWinner() {
+        
+    }
+    
+    @Override
+    public String toString(String option) {
+        String string = "";
+        return string;
+    }
 
 }//end class

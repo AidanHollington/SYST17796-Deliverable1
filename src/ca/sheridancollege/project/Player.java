@@ -11,7 +11,7 @@ package ca.sheridancollege.project;
  *
  * @author dancye
  */
-public abstract class Player extends GroupOfCards {
+public class Player extends GroupOfCards {
 
     private String playerID; //the unique ID for this player
 
@@ -45,6 +45,14 @@ public abstract class Player extends GroupOfCards {
      * The method to be instantiated when you subclass the Player class with
      * your specific type of Player and filled in with logic to play your game.
      */
-    public abstract void play();
+    public void play() {
+        
+    }
 
+    @Override
+    public String toString(String option) {
+        String string = "";
+        return string;
+    }
+    
 }

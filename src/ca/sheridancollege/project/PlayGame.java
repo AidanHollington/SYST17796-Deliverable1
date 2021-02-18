@@ -19,13 +19,13 @@ public class PlayGame {
 
         // Create instance of GoFish
         GoFish game;
-        
+
         // create scanner class
         Scanner input = new Scanner(System.in);
 
         // temporary array to hold player names
         String[] playerNames;
-        
+
         // number of players
         int numOfPlayers;
 
@@ -33,8 +33,8 @@ public class PlayGame {
         while (true) {
             System.out.print("How many players would like to play? ");
             numOfPlayers = input.nextInt();
-            
-            if (numOfPlayers<2) {
+
+            if (numOfPlayers < 2) {
                 System.out.println("\nGo Fish requires at least two players.");
             } else {
                 break;
@@ -50,20 +50,21 @@ public class PlayGame {
             playerNames[i] = input.next();
         }
 
-//        for (int z = 0; z < playerNames.length; z++) {
-//            System.out.println(playerNames[z]);
-//        }
-        // instantiate new instance of GoFish
-        
+        // Determine the hand size, seven for two or three players, five for 4 or more
         if (numOfPlayers > 3) {
             game = new GoFish(5);
         } else {
             game = new GoFish(7);
         }
-        
 
         game.setUp(playerNames);
 
-        game.play();
+        System.out.println();
+        
+        System.out.println(game.toString());
+        
+        
+        
+//        game.play();
     }
 }

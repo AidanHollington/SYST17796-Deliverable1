@@ -16,14 +16,26 @@ import java.util.ArrayList;
 public class GoFish extends Game {
 
     private int numOfPlayers;
+    private int handSize;
+    private ArrayList<Player> players;// the players of the game
+    
 
     // args constructor
     public GoFish(int handSize) {
         // call super class
         super("GoFish", handSize);
+        this.handSize = handSize;
+        
+        // create ArrayList to hold each player's information
+        players = new ArrayList();
 
     }
 
+    public int getHandSize() {
+        return this.handSize;
+    }
+    
+    
     @Override
     public void play() {
 
@@ -31,20 +43,18 @@ public class GoFish extends Game {
 
     public void setUp(String[] playerNames) {
         for (int i = 0; i < playerNames.length; i++) {
-            
+            players.add(new Player(playerNames[i], this.handSize));
         }
 
     }
 
     public void dealHands() {
-        if (this.numOfPlayers < 2) {
-            
-        }
+        
     }
 
     @Override
     public String toString() {
-        String string = "temporary";
+        String string = players.get(0).getPlayerID();
 
         return string;
     }

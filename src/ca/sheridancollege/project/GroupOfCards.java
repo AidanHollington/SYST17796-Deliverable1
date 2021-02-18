@@ -51,13 +51,13 @@ public abstract class GroupOfCards extends Card {
     public void setSize(int givenSize) {
         size = givenSize;
     }
-    
+
     public void addCard(String suit, int value) {
-        
+
     }
-    
+
     public void removeCard(String suit, int value) {
-        
+
     }
 
 }//end class

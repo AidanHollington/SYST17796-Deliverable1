@@ -18,6 +18,8 @@ public abstract class Card {
     private String suit; //clubs, spades, diamonds, hearts
     private int value;//1-13
 
+    public static final String[] SUITS = {"Hearts", "Diamonds", "Spades", "Clubs"};
+
     /**
      * @return the suit
      */
@@ -52,7 +54,6 @@ public abstract class Card {
      * @return a String representation of a card. Could be an UNO card, a
      * regular playing card etc.
      */
-    @Override
-    public abstract String toString();
+    public abstract String toString(String option);
 
 }
