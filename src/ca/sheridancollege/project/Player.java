@@ -40,18 +40,5 @@ public class Player extends GroupOfCards {
     public void setPlayerID(String givenID) {
         playerID = givenID;
     }
-
-    /**
-     * The method to be instantiated when you subclass the Player class with
-     * your specific type of Player and filled in with logic to play your game.
-     */
-    public void play() {
-        
-    }
-
-    public String toString(String option) {
-        String string = "";
-        return string;
-    }
     
 }

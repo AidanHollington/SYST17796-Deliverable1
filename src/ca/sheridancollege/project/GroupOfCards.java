@@ -15,14 +15,16 @@ import java.util.Collections;
  *
  * @author dancye
  */
-public class GroupOfCards {
+public abstract class GroupOfCards {
 
     //The group of cards, stored in an ArrayList
-    private ArrayList<Card> cards;
+    public ArrayList<Card> cards;
     private int size;//the size of the grouping
 
     public GroupOfCards(int givenSize) {
         size = givenSize;
+        
+        cards = new ArrayList();
     }
 
     /**
@@ -52,13 +54,5 @@ public class GroupOfCards {
         size = givenSize;
     }
 
-    public void addCard(String suit, int value) {
-
-        cards.add(new Card(suit, value));
-    }
-
-    public void removeCard(String suit, int value) {
-
-    }
 
 }//end class

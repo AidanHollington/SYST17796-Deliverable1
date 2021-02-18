@@ -13,7 +13,7 @@ import java.util.ArrayList;
  *
  * @author dancye
  */
-public class Game extends Player {
+public abstract class Game extends Player {
 
     private final String gameName;//the title of the game
     private ArrayList<Player> players;// the players of the game
@@ -32,12 +32,12 @@ public class Game extends Player {
         return gameName;
     }
 
-    /**
-     * @return the players of this game
-     */
-    public ArrayList<Player> getPlayers() {
-        return players;
-    }
+//    /**
+//     * @return the players of this game
+//     */
+//    public ArrayList<Player> getPlayers() {
+//        return players;
+//    }
 
     /**
      * @param players the players of this game
@@ -60,11 +60,6 @@ public class Game extends Player {
      */
     public void declareWinner() {
         
-    }
-    
-    public String toString(String option) {
-        String string = "";
-        return string;
     }
 
 }//end class
