@@ -62,11 +62,11 @@ public class PlayGame {
         // deal hands to each player
         game.dealHands();
 
-        // test toString method of GoFish
-        System.out.println(game.toString(0));
+//        // test toString method of GoFish
+//        System.out.println(game.toString(0));
         
         // play the game
-        game.play();
+        game.play(input);
 
     }
 }

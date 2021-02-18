@@ -15,6 +15,7 @@ package ca.sheridancollege.project;
 public class Card {
     //default modifier for child classes
 
+    // instance variables
     private String suit; //clubs, spades, diamonds, hearts
     private int value;//1-13
 
