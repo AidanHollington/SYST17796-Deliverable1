@@ -58,16 +58,18 @@ public class PlayGame {
     }
 
     public static void main(String[] args) {
-        // there will be more here once the other classes are more complete!
-
-        // create scanner class
+        // create Scanner class
         Scanner input = new Scanner(System.in);
+        
+        // Create and initialize an instance of GoFish
         GoFish game = setUpGame(input);
 
+        
         System.out.println();
 
         System.out.println(game.toString());
 
-//        game.play();
+        game.play();
+        
     }
 }

@@ -62,7 +62,6 @@ public class Game extends Player {
         
     }
     
-    @Override
     public String toString(String option) {
         String string = "";
         return string;

@@ -15,7 +15,7 @@ import java.util.Collections;
  *
  * @author dancye
  */
-public abstract class GroupOfCards extends Card {
+public class GroupOfCards {
 
     //The group of cards, stored in an ArrayList
     private ArrayList<Card> cards;
@@ -54,6 +54,7 @@ public abstract class GroupOfCards extends Card {
 
     public void addCard(String suit, int value) {
 
+        cards.add(new Card(suit, value));
     }
 
     public void removeCard(String suit, int value) {

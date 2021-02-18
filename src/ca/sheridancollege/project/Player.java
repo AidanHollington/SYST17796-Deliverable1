@@ -49,7 +49,6 @@ public class Player extends GroupOfCards {
         
     }
 
-    @Override
     public String toString(String option) {
         String string = "";
         return string;

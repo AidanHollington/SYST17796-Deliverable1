@@ -18,14 +18,13 @@ public class GoFish extends Game {
     private int numOfPlayers;
     private int handSize;
     private ArrayList<Player> players;// the players of the game
-    
 
     // args constructor
     public GoFish(int handSize) {
         // call super class
         super("GoFish", handSize);
         this.handSize = handSize;
-        
+
         // create ArrayList to hold each player's information
         players = new ArrayList();
 
@@ -34,11 +33,10 @@ public class GoFish extends Game {
     public int getHandSize() {
         return this.handSize;
     }
-    
-    
+
     @Override
     public void play() {
-
+        players.get(0).addCard("Hearts", 3);
     }
 
     public void setUp(String[] playerNames) {
@@ -49,7 +47,7 @@ public class GoFish extends Game {
     }
 
     public void dealHands() {
-        
+
     }
 
     @Override
@@ -61,7 +59,7 @@ public class GoFish extends Game {
 
     @Override
     public void declareWinner() {
-        
+
     }
 
 }
