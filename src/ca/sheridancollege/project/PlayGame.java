@@ -8,20 +8,15 @@ package ca.sheridancollege.project;
 import java.util.Scanner;
 
 /**
- * Plays a selected card game
+ * Plays a game of Go Fish
  *
  * @author aidanhollington
  */
 public class PlayGame {
 
-    public static void main(String[] args) {
-        // there will be more here once the other classes are more complete!
-
+    public static GoFish setUpGame(Scanner input) {
         // Create instance of GoFish
         GoFish game;
-
-        // create scanner class
-        Scanner input = new Scanner(System.in);
 
         // temporary array to hold player names
         String[] playerNames;
@@ -59,12 +54,20 @@ public class PlayGame {
 
         game.setUp(playerNames);
 
+        return game;
+    }
+
+    public static void main(String[] args) {
+        // there will be more here once the other classes are more complete!
+
+        // create scanner class
+        Scanner input = new Scanner(System.in);
+        GoFish game = setUpGame(input);
+
         System.out.println();
-        
+
         System.out.println(game.toString());
-        
-        
-        
+
 //        game.play();
     }
 }
