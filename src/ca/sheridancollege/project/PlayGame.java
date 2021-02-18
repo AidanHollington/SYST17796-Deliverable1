@@ -5,6 +5,7 @@
  */
 package ca.sheridancollege.project;
 
+import java.util.ArrayList;
 import java.util.Scanner;
 
 /**
@@ -14,7 +15,10 @@ import java.util.Scanner;
  */
 public class PlayGame {
 
-    public static GoFish setUpGame(Scanner input) {
+    public static void main(String[] args) {
+        // create Scanner class
+        Scanner input = new Scanner(System.in);
+
         // Create instance of GoFish
         GoFish game;
 
@@ -53,23 +57,16 @@ public class PlayGame {
         }
 
         game.setUp(playerNames);
-
-        return game;
-    }
-
-    public static void main(String[] args) {
-        // create Scanner class
-        Scanner input = new Scanner(System.in);
         
-        // Create and initialize an instance of GoFish
-        GoFish game = setUpGame(input);
-
         
-        System.out.println();
+        // deal hands to each player
+        game.dealHands();
 
-        System.out.println(game.toString());
-
+        // test toString method of GoFish
+        System.out.println(game.toString(0));
+        
+        // play the game
         game.play();
-        
+
     }
 }
