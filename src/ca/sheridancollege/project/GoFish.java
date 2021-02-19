@@ -22,6 +22,12 @@ public class GoFish extends Game {
     private int numOfPlayers;
     private int handSize;
     private int cardsInPool = 52;
+
+    private int numberOfTurns = 0;
+
+    // determines if the game is active
+    private boolean gameActive = true;
+
     private ArrayList<Player> players;// the players of the game
 
     // list of possible suits
@@ -103,7 +109,54 @@ public class GoFish extends Game {
      * @param input which Scanner object to use
      */
     public void play(Scanner input) {
+        String playerString = "";
 
+        int i = 0;
+
+        int currentPlayer = 0;
+
+        int selectedPlayer;
+        int selectedValue;
+
+        // create string representation of each player's name
+        for (i = 1; i < this.players.size(); i++) {
+            playerString += this.players.get(i - 1).getPlayerID() + " (player " + i + ")" + ", ";
+        }
+        playerString += this.players.get(i - 1).getPlayerID() + " (player " + (i) + ")";
+
+        do {
+
+            // ask player for a valid player number
+            while (true) {
+                // print player's names
+                System.out.println("Players: " + playerString);
+                System.out.print("It is " + this.players.get(currentPlayer).getPlayerID() + "'s turn. Who do you want to ask? (1-" + this.players.size() + "): ");
+
+                selectedPlayer = input.nextInt() - 1;
+
+                // verify input
+                if (selectedPlayer >= 1 && selectedPlayer <= this.players.size()) {
+                    break;
+                } else {
+                    System.out.println("\nPlease enter a valid player number.");
+                }
+            }
+
+            // ask player for a valid card value
+            while (true) {
+                System.out.print("Which value of card do you want from " + this.players.get(selectedPlayer).getPlayerID() + "? (1-13) ");
+                selectedValue = input.nextInt();
+
+                if (selectedValue >= 1 && selectedValue <= 13) {
+                    break;
+                } else {
+                    System.out.println("\nPlease enter a valid card value.");
+                }
+            }
+
+            System.out.println("You gained " + moveCards(currentPlayer, selectedPlayer, selectedValue) + " cards of value " + selectedValue + " from " + this.players.get(selectedPlayer).getPlayerID() + ".");
+
+        } while (this.gameActive);
     }
 
     /**
@@ -172,18 +225,18 @@ public class GoFish extends Game {
      * @param source ID of player to move from
      * @param destination ID of player to move to
      * @param suit what suit should be moved
-     * @return whether any cards were moved or not
+     * @return number of cards moved
      */
-    public boolean moveCards(int source, int destination, String suit) {
+    public int moveCards(int source, int destination, String suit) {
+        int cardsMoved = 0;
+
         for (int i = 0; i < this.players.size(); i++) {
             if (this.players.get(source).cards.get(i).getSuit().equals(suit)) {
-                players.get(destination).cards.add(players.get(source).cards.remove(i));
-            } else {
-                return false;
+                this.players.get(destination).cards.add(this.players.get(source).cards.remove(i));
+                cardsMoved++;
             }
-
         }
-        return true;
+        return cardsMoved;
     }
 
     /**
@@ -193,17 +246,18 @@ public class GoFish extends Game {
      * @param source ID of player to move from
      * @param destination ID of player to move to
      * @param value what value should be moved
-     * @return whether any cards were moved or not
+     * @return number of cards moved
      */
-    public boolean moveCards(int source, int destination, int value) {
+    public int moveCards(int source, int destination, int value) {
+        int cardsMoved = 0;
+
         for (int i = 0; i < this.players.size(); i++) {
             if (this.players.get(source).cards.get(i).getValue() == value) {
-                players.get(destination).cards.add(players.get(source).cards.remove(i));
-            } else {
-                return false;
+                this.players.get(destination).cards.add(this.players.get(source).cards.remove(i));
+                cardsMoved++;
             }
         }
-        return true;
+        return cardsMoved;
     }
 
     /**
