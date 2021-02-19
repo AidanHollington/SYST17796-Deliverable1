@@ -14,7 +14,7 @@ import java.util.Scanner;
  * @author aidanhollington
  */
 public class PlayGame {
-
+    
     public static void main(String[] args) {
         // create Scanner class
         Scanner input = new Scanner(System.in);
@@ -32,7 +32,7 @@ public class PlayGame {
         while (true) {
             System.out.print("How many players would like to play? ");
             numOfPlayers = input.nextInt();
-
+            
             if (numOfPlayers < 2) {
                 System.out.println("\nGo Fish requires at least two players.");
             } else {
@@ -55,18 +55,15 @@ public class PlayGame {
         } else {
             game = new GoFish(7);
         }
-
+        
+        // setup the players
         game.setUp(playerNames);
-        
-        
+
         // deal hands to each player
         game.dealHands();
-
-//        // test toString method of GoFish
-//        System.out.println(game.toString(0));
         
         // play the game
         game.play(input);
-
+        
     }
 }
