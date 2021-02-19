@@ -19,6 +19,7 @@ public abstract class Game extends Player {
 
     private final String gameName;//the title of the game
     
+    // constructor
     public Game(String givenName, int handSize) {
         super("players", handSize);
         

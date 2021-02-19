@@ -10,6 +10,7 @@ package ca.sheridancollege.project;
  * which should be unique.
  *
  * @author dancye
+ * @author aidanhollington
  */
 public class Player extends GroupOfCards {
 

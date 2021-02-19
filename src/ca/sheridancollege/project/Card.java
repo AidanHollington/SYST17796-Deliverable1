@@ -11,6 +11,7 @@ package ca.sheridancollege.project;
  * code should remember to add themselves as a modifier.
  *
  * @author dancye
+ * @author aidanhollington
  */
 public class Card {
     //default modifier for child classes

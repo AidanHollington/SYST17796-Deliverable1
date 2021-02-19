@@ -14,6 +14,7 @@ import java.util.Collections;
  * size attribute which is flexible for reuse.
  *
  * @author dancye
+ * @author aidanhollington
  */
 public abstract class GroupOfCards {
 
