@@ -19,6 +19,9 @@ public class GoFish extends Game {
     private int cardsInPool = 52;
     private int numberOfTurns = 0;
 
+    // random object
+    Random ran = new Random();
+
     // determines if the game is active
     private boolean gameActive = true;
 
@@ -28,7 +31,12 @@ public class GoFish extends Game {
     // list of possible suits
     private final String[] SUITS = {"Hearts", "Diamonds", "Spades", "Clubs"};
 
-    // constructor
+    /**
+     * Constructor for GoFish
+     *
+     * @author aidanhollington
+     * @param handSize initial hand size
+     */
     public GoFish(int handSize) {
         // call super class
         super("GoFish", handSize);
@@ -42,6 +50,7 @@ public class GoFish extends Game {
     /**
      * Returns the starting hand size for each player
      *
+     * @author aidanhollington
      * @return starting hand size
      */
     public int getHandSize() {
@@ -66,14 +75,11 @@ public class GoFish extends Game {
      * @author aidanhollington
      */
     public void dealHands() {
-        // create Random class
-        Random ran = new Random();
-
         // create hand of cards
         // creates a number of cards (stored in handSize), all randomized, for each player
         for (int i = 0; i < players.size(); i++) {
             for (int j = 0; j < handSize; j++) {
-                this.players.get(i).cards.add(new Card(SUITS[ran.nextInt(3)], ran.nextInt(13) + 1));
+                this.players.get(i).cards.add(new Card(SUITS[this.ran.nextInt(3)], this.ran.nextInt(13) + 1));
                 this.cardsInPool -= 1;
             }
         }
@@ -100,6 +106,7 @@ public class GoFish extends Game {
     /**
      * Plays the game
      *
+     * @author aidanhollington
      * @param input which Scanner object to use
      */
     public void play(Scanner input) {
@@ -148,19 +155,56 @@ public class GoFish extends Game {
                 }
             }
 
+            // tell player how many cards they gained
             System.out.println("You gained " + moveCards(currentPlayer, selectedPlayer, selectedValue) + " cards of value " + selectedValue + " from " + this.players.get(selectedPlayer).getPlayerID() + ".");
+
+            if (moveCards(currentPlayer, selectedPlayer, selectedValue) == 0) {
+                System.out.println(this.players.get(selectedPlayer).getPlayerID() + "Go Fish! You now get a random card from the pool.");
+                addRandomCard(selectedPlayer);
+            }
+
+            if (checkForFourSuitsofSameRank(currentPlayer, selectedValue) == false) {
+                currentPlayer++;
+            } else {
+                System.out.println("You have all four suits, you now get an extra turn!");
+            }
 
         } while (this.gameActive);
     }
 
+    public int determineMostNumofCards() {
+        ArrayList<Player> players = new ArrayList();
+        
+        int playerID;
+        
+        
+        for (int i=0;i<this.players.size();i++) {
+            players = this.players;
+        }
+        
+        return playerID;
+        
+    }
+    
     /**
-     * Prompt for and add a card to a specified player's hand
+     * Adds a random card to the specified player's hand
+     *
+     * @author aidanhollington
+     * @param playerNum which player to add to
+     */
+    public void addRandomCard(int playerNum) {
+        this.players.get(playerNum).cards.add(new Card(SUITS[this.ran.nextInt(3)], this.ran.nextInt(13) + 1));
+        this.cardsInPool -= 1;
+    }
+
+    /**
+     * Prompt for and add a card from the pool to the specified player's hand
      *
      * @author aidanhollington
      * @param playerNum which player to add to
      * @param input which Scanner object to use
      */
-    public void addCard(int playerNum, Scanner input) {
+    public void takeCardFromPool(int playerNum, Scanner input) {
 
         String suit;
         int value;
@@ -209,7 +253,7 @@ public class GoFish extends Game {
      * @param value which value to search for
      */
     public void removeCards(int playerID, String suit, int value) {
-        
+
         // create new card object with specified suit and value
         Card c = new Card(suit, value);
 
@@ -259,6 +303,38 @@ public class GoFish extends Game {
             }
         }
         return cardsMoved;
+    }
+
+    /**
+     * Check if a player has four suits of the same value
+     *
+     * @author aidanhollington
+     * @param playerNum which player to add to
+     * @param value which value to search for
+     * @return number of cards found
+     */
+    public boolean checkForFourSuitsofSameRank(int playerNum, int value) {
+        int cardsCounted = 0;
+        Card[] cards = new Card[4];
+
+        cards[0] = new Card("Hearts", value);
+        cards[1] = new Card("Diamonds", value);
+        cards[2] = new Card("Spades", value);
+        cards[3] = new Card("Clubs", value);
+
+        // search selected player ID 
+        for (int i = 0; i < cards.length; i++) {
+            if (this.players.get(playerNum).cards.indexOf(cards[i]) != -1) {
+                cardsCounted++;
+            }
+        }
+
+        if (cardsCounted == 4) {
+            return true;
+        } else {
+            return false;
+        }
+
     }
 
     /**
