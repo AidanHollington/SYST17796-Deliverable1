@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package ca.sheridancollege.project;
 
 import ca.sheridancollege.project.Game;
@@ -22,18 +17,18 @@ public class GoFish extends Game {
     private int numOfPlayers;
     private int handSize;
     private int cardsInPool = 52;
-
     private int numberOfTurns = 0;
 
     // determines if the game is active
     private boolean gameActive = true;
 
-    private ArrayList<Player> players;// the players of the game
+    // the players of the game
+    private ArrayList<Player> players;
 
     // list of possible suits
     private final String[] SUITS = {"Hearts", "Diamonds", "Spades", "Clubs"};
 
-    // args constructor
+    // constructor
     public GoFish(int handSize) {
         // call super class
         super("GoFish", handSize);
@@ -82,7 +77,6 @@ public class GoFish extends Game {
                 this.cardsInPool -= 1;
             }
         }
-
     }
 
     /**
@@ -163,14 +157,16 @@ public class GoFish extends Game {
      * Prompt for and add a card to a specified player's hand
      *
      * @author aidanhollington
-     * @param playerID which player to add to
+     * @param playerNum which player to add to
      * @param input which Scanner object to use
      */
-    public void addCard(int playerID, Scanner input) {
+    public void addCard(int playerNum, Scanner input) {
 
         String suit;
         int value;
 
+        // ask for and verify desired suit
+        // loop until a valid input is entered
         while (true) {
             System.out.print("Enter a suit (Hearts, Diamonds, Spades, Clubs): ");
             suit = input.next();
@@ -183,6 +179,8 @@ public class GoFish extends Game {
 
         }
 
+        // ask for and verify desired value
+        // loop until a valid input is entered
         while (true) {
             System.out.print("Enter a value (1-13): ");
             value = input.nextInt();
@@ -194,7 +192,8 @@ public class GoFish extends Game {
             }
         }
 
-        this.players.get(playerID).cards.add(new Card(suit, value));
+        // add new Card object to selected player
+        this.players.get(playerNum).cards.add(new Card(suit, value));
 
         // remove one card from the pool
         this.cardsInPool -= 1;
@@ -210,10 +209,12 @@ public class GoFish extends Game {
      * @param value which value to search for
      */
     public void removeCards(int playerID, String suit, int value) {
-
+        
+        // create new card object with specified suit and value
         Card c = new Card(suit, value);
 
-        int index = this.players.indexOf(c);
+        // search selected player ID 
+        int index = this.players.get(playerID).cards.indexOf(c);
 
         this.players.get(playerID).cards.remove(index);
     }
