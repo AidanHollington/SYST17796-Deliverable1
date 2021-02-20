@@ -48,16 +48,6 @@ public class GoFish extends Game {
     }
 
     /**
-     * Returns the starting hand size for each player
-     *
-     * @author aidanhollington
-     * @return starting hand size
-     */
-    public int getHandSize() {
-        return this.handSize;
-    }
-
-    /**
      * Creates a player object for each player, using their names
      *
      * @author aidanhollington
@@ -77,7 +67,7 @@ public class GoFish extends Game {
     public void dealHands() {
         // create hand of cards
         // creates a number of cards (stored in handSize), all randomized, for each player
-        for (int i = 0; i < players.size(); i++) {
+        for (int i = 0; i < this.players.size(); i++) {
             for (int j = 0; j < handSize; j++) {
                 this.players.get(i).cards.add(new Card(SUITS[this.ran.nextInt(3)], this.ran.nextInt(13) + 1));
                 this.cardsInPool -= 1;
@@ -89,7 +79,7 @@ public class GoFish extends Game {
      * Creates a list of each card in a specified player's hand
      *
      * @author aidanhollington
-     * @param playerNum which 
+     * @param playerNum which
      * @return formatted string
      */
     public String toString(int playerNum) {
@@ -146,7 +136,7 @@ public class GoFish extends Game {
             }
 
             selectedPlayer = selectedPlayer - 1;
-            
+
             // ask player for a valid card value
             while (true) {
                 System.out.print("Which value of card do you want from " + this.players.get(selectedPlayer).getPlayerID() + "? (1-13) ");
@@ -176,15 +166,19 @@ public class GoFish extends Game {
             if (this.cardsInPool == 0) {
                 this.gameActive = false;
             }
-            
+
             currentPlayer = currentPlayer % 3;
-            
+
+            for (int z = 0; z < players.size(); z++) {
+                System.out.println(toString(z));
+            }
+
         } while (this.gameActive);
-        
+
         declareWinner();
-        
+
     }
-    
+
     /**
      * Adds a random card to the specified player's hand
      *
@@ -244,46 +238,6 @@ public class GoFish extends Game {
     }
 
     /**
-     * Remove a specified card by it's suit and value
-     *
-     * @author aidanhollington
-     * @param playerNum which player to remove from
-     * @param suit which suit to search for
-     * @param value which value to search for
-     */
-    public void removeCards(int playerNum, String suit, int value) {
-
-        // create new card object with specified suit and value
-        Card c = new Card(suit, value);
-
-        // search selected player ID 
-        int index = this.players.get(playerNum).cards.indexOf(c);
-
-        this.players.get(playerNum).cards.remove(index);
-    }
-
-    /**
-     * Move all cards of a specific suit from one player to another
-     *
-     * @author aidanhollington
-     * @param source ID of player to move from
-     * @param destination ID of player to move to
-     * @param suit what suit should be moved
-     * @return number of cards moved
-     */
-    public int moveCards(int source, int destination, String suit) {
-        int cardsMoved = 0;
-
-        for (int i = 0; i < this.players.size(); i++) {
-            if (this.players.get(source).cards.get(i).getSuit().equals(suit)) {
-                this.players.get(destination).cards.add(this.players.get(source).cards.remove(i));
-                cardsMoved++;
-            }
-        }
-        return cardsMoved;
-    }
-
-    /**
      * Move all cards of a specific value from one player to another
      *
      * @author aidanhollington
@@ -294,11 +248,22 @@ public class GoFish extends Game {
      */
     public int moveCards(int source, int destination, int value) {
         int cardsMoved = 0;
+        int counter = 0;
+        for (int j = 0; j < this.players.get(source).cards.size(); j++) {
+            for (int i = 0; i < this.players.get(source).cards.size(); i++) {
+                if (this.players.get(source).cards.get(i).getValue() == value) {
 
-        for (int i = 0; i < this.players.size(); i++) {
-            if (this.players.get(source).cards.get(i).getValue() == value) {
-                this.players.get(destination).cards.add(this.players.get(source).cards.remove(i));
-                cardsMoved++;
+                    this.players.get(destination).cards.add(new Card(this.players.get(source).cards.get(i).getSuit(), this.players.get(source).cards.get(i).getValue()));
+                    this.players.get(source).cards.remove(i);
+                    cardsMoved++;
+
+                    for (int z = 0; z < players.size(); z++) {
+                        System.out.println(toString(z));
+                    }
+
+                }
+
+                counter++;
             }
         }
         return cardsMoved;
@@ -344,11 +309,11 @@ public class GoFish extends Game {
     @Override
     public void declareWinner() {
         System.out.println();
-        
-        for (int i=0;i<this.players.size();i++) {
+
+        for (int i = 0; i < this.players.size(); i++) {
             System.out.println(this.players.get(i).getPlayerID() + " has " + this.players.get(i).getSize() + " cards.");
         }
-        
+
         System.out.println("Player with the most amount of cards wins!");
     }
 
