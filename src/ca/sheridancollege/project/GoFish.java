@@ -32,6 +32,20 @@ public class GoFish extends Game {
     private final String[] SUITS = {"Hearts", "Diamonds", "Spades", "Clubs"};
 
     /**
+     * Returns a random integer in a specified range
+     *
+     * @author aidanhollington
+     * @param min minimum value
+     * @param max maximum value
+     * @return randomized integer in range
+     */
+    public int randomInteger(int min, int max) {
+        Random random = new Random();
+
+        return random.nextInt(max - min) + min;
+    }
+
+    /**
      * Constructor for GoFish
      *
      * @author aidanhollington
