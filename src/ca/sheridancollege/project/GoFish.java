@@ -117,8 +117,17 @@ public class GoFish extends Game {
 
         do {
 
+            if (this.cardsInPool == 0) {
+                this.gameActive = false;
+            }
+
             // ask player for a valid player number
             while (true) {
+
+                for (int z = 0; z < players.size(); z++) {
+                    System.out.println(toString(z));
+                }
+
                 // print player's names
                 System.out.println("Players: " + playerString);
                 System.out.println(cardsInPool + " card(s) remaining.");
@@ -149,13 +158,13 @@ public class GoFish extends Game {
                 }
             }
 
-            // tell player how many cards they gained
-            System.out.println("You gained " + moveCards(currentPlayer, selectedPlayer, selectedValue) + " cards of value " + selectedValue + " from " + this.players.get(selectedPlayer).getPlayerID() + ".");
+            // tell players how many cards they have
+            System.out.println();
 
-            if (moveCards(currentPlayer, selectedPlayer, selectedValue) == 0) {
-                System.out.println(this.players.get(selectedPlayer).getPlayerID() + " said Go Fish! They now get a random card from the pool.");
-                addRandomCard(selectedPlayer);
-            }
+//            if (moveCards(selectedPlayer, currentPlayer, selectedValue) == 0) {
+//                System.out.println(this.players.get(selectedPlayer).getPlayerID() + " said Go Fish! They now get a random card from the pool.");
+//                addRandomCard(selectedPlayer);
+//            }
 
             if (checkForFourSuitsofSameRank(currentPlayer, selectedValue) == false) {
                 currentPlayer++;
@@ -163,15 +172,7 @@ public class GoFish extends Game {
                 System.out.println("You have all four suits, you now get an extra turn!");
             }
 
-            if (this.cardsInPool == 0) {
-                this.gameActive = false;
-            }
-
             currentPlayer = currentPlayer % 3;
-
-            for (int z = 0; z < players.size(); z++) {
-                System.out.println(toString(z));
-            }
 
         } while (this.gameActive);
 
@@ -199,27 +200,28 @@ public class GoFish extends Game {
      * @param value what value should be moved
      * @return number of cards moved
      */
-    public int moveCards(int source, int destination, int value) {
-        int cardsMoved = 0;
-        int counter = 0;
-        for (int j = 0; j < this.players.get(source).cards.size(); j++) {
+    public void moveCards(int source, int destination, int value) {
+        // how many card checks were performed
+        int iterations = 0;
+
+        // buffer to hold moved cards
+        ArrayList<Card> cardBuffer = new ArrayList<Card>();
+
+        // take card(s) from source player and place them in buffer
+        do {
             for (int i = 0; i < this.players.get(source).cards.size(); i++) {
                 if (this.players.get(source).cards.get(i).getValue() == value) {
-
-                    this.players.get(destination).cards.add(new Card(this.players.get(source).cards.get(i).getSuit(), this.players.get(source).cards.get(i).getValue()));
+                    cardBuffer.add(this.players.get(source).cards.get(i));
+                    
                     this.players.get(source).cards.remove(i);
-                    cardsMoved++;
-
-                    for (int z = 0; z < players.size(); z++) {
-                        System.out.println(toString(z));
-                    }
-
                 }
-
-                counter++;
             }
-        }
-        return cardsMoved;
+            iterations++;
+        } while (iterations < Math.pow(this.players.get(source).cards.size(), 2));
+
+        // add all cards from buffer to destination player
+        this.players.get(destination).cards.addAll(cardBuffer);
+
     }
 
     /**
