@@ -32,20 +32,6 @@ public class GoFish extends Game {
     private final String[] SUITS = {"Hearts", "Diamonds", "Spades", "Clubs"};
 
     /**
-     * Returns a random integer in a specified range
-     *
-     * @author aidanhollington
-     * @param min minimum value
-     * @param max maximum value
-     * @return randomized integer in range
-     */
-    public int randomInteger(int min, int max) {
-        Random random = new Random();
-
-        return random.nextInt(max - min) + min;
-    }
-
-    /**
      * Constructor for GoFish
      *
      * @author aidanhollington
@@ -202,53 +188,6 @@ public class GoFish extends Game {
     public void addRandomCard(int playerNum) {
         this.players.get(playerNum).cards.add(new Card(SUITS[this.ran.nextInt(3)], this.ran.nextInt(13) + 1));
         this.cardsInPool -= 1;
-    }
-
-    /**
-     * Prompt for and add a card from the pool to the specified player's hand
-     *
-     * @author aidanhollington
-     * @param playerNum which player to add to
-     * @param input which Scanner object to use
-     */
-    public void takeCardFromPool(int playerNum, Scanner input) {
-
-        String suit;
-        int value;
-
-        // ask for and verify desired suit
-        // loop until a valid input is entered
-        while (true) {
-            System.out.print("Enter a suit (Hearts, Diamonds, Spades, Clubs): ");
-            suit = input.next();
-
-            if ((suit.equals(SUITS[0])) || (suit.equals(SUITS[1])) || (suit.equals(SUITS[2])) || (suit.equals(SUITS[3]))) {
-                break;
-            } else {
-                System.out.println("Please enter a valid suit.");
-            }
-
-        }
-
-        // ask for and verify desired value
-        // loop until a valid input is entered
-        while (true) {
-            System.out.print("Enter a value (1-13): ");
-            value = input.nextInt();
-
-            if (value >= 1 && value <= 13) {
-                break;
-            } else {
-                System.out.println("Please enter a valid value.");
-            }
-        }
-
-        // add new Card object to selected player
-        this.players.get(playerNum).cards.add(new Card(suit, value));
-
-        // remove one card from the pool
-        this.cardsInPool -= 1;
-
     }
 
     /**
