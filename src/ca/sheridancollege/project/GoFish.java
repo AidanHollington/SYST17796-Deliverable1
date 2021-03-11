@@ -87,20 +87,15 @@ public class GoFish extends Game {
     }
 
     /**
-     * Creates a list of each card in a specified player's hand
+     * Prints a formatted list of each player, and the number of cards they have
      *
      * @author aidanhollington
-     * @param playerNum which
-     * @return formatted string
      */
-    public String toString(int playerNum) {
-        String string = this.players.get(playerNum).getPlayerID() + "\n";
-        // print each card in the player's hand
-        for (int j = 0; j < this.players.get(playerNum).cards.size(); j++) {
-            string += this.players.get(playerNum).cards.get(j).getSuit() + " " + this.players.get(playerNum).cards.get(j).getValue() + "\n";
+    public void printPlayerCardCounts() {
+        // tell players how many cards they have
+        for (int i = 0; i < this.players.size(); i++) {
+            System.out.println(this.players.get(i).getPlayerID() + " has " + getNumOfCards(i) + " cards.");
         }
-
-        return string;
     }
 
     @Override
@@ -111,22 +106,30 @@ public class GoFish extends Game {
      * @param input which Scanner object to use
      */
     public void play(Scanner input) {
+        // string representation of each player's name
         String playerString = "";
 
         int i = 0;
 
+        // current player
         int currentPlayer = 0;
 
+        // player selected by current player
         int selectedPlayer;
+        
+        // which value the current player selected
         int selectedValue;
 
         // create string representation of each player's name
         for (i = 1; i < this.players.size(); i++) {
             playerString += this.players.get(i - 1).getPlayerID() + " (player " + i + ")" + ", ";
         }
+
         playerString += this.players.get(i - 1).getPlayerID() + " (player " + (i) + ")";
 
+        // main game loop
         do {
+            printPlayerCardCounts();
 
             if (this.cardsInPool == 0) {
                 this.gameActive = false;
@@ -135,18 +138,16 @@ public class GoFish extends Game {
             // ask player for a valid player number
             while (true) {
 
-                for (int z = 0; z < players.size(); z++) {
-                    System.out.println(toString(z));
-                }
+                // print how many cards are remaining in the pool
+                System.out.println(cardsInPool + " card(s) remaining in pool.");
 
-                // print player's names
-                System.out.println("Players: " + playerString);
-                System.out.println(cardsInPool + " card(s) remaining.");
+                // ask which other player the player wants to ask
                 System.out.print("It is " + this.players.get(currentPlayer).getPlayerID() + "'s turn. Who do you want to ask? (1-" + this.players.size() + "): ");
-
                 selectedPlayer = input.nextInt();
 
+                // line break
                 System.out.println();
+
                 // verify input
                 if (selectedPlayer >= 1 && selectedPlayer <= this.players.size()) {
                     break;
@@ -155,6 +156,7 @@ public class GoFish extends Game {
                 }
             }
 
+            // convert player number to index for ArrayList
             selectedPlayer = selectedPlayer - 1;
 
             // ask player for a valid card value
@@ -169,15 +171,7 @@ public class GoFish extends Game {
                 }
             }
 
-            // tell players how many cards they have
-            for (int j = 0; i < this.players.size(); i++) {
-
-            }
-
-//            if (moveCards(selectedPlayer, currentPlayer, selectedValue) == 0) {
-//                System.out.println(this.players.get(selectedPlayer).getPlayerID() + " said Go Fish! They now get a random card from the pool.");
-//                addRandomCard(selectedPlayer);
-//            }
+            // check if player has four suits of the same value
             if (checkForFourSuitsofSameRank(currentPlayer, selectedValue) == false) {
                 currentPlayer++;
             } else {
@@ -188,6 +182,7 @@ public class GoFish extends Game {
 
         } while (this.gameActive);
 
+        // if game is over, declare winner
         declareWinner();
 
     }
@@ -198,7 +193,7 @@ public class GoFish extends Game {
      * @author aidanhollington
      * @param playerNum which player to add to
      */
-    public void addRandomCard(int playerNum) {
+    public void takeCardFromPool(int playerNum) {
         this.players.get(playerNum).cards.add(new Card(SUITS[this.ran.nextInt(3)], this.ran.nextInt(13) + 1));
         this.cardsInPool -= 1;
     }
@@ -233,6 +228,12 @@ public class GoFish extends Game {
 
         // add all cards from buffer to destination player
         this.players.get(destination).cards.addAll(cardBuffer);
+
+        // if no cards were moved, say go fish
+        if (cardBuffer.size() == 0) {
+            System.out.println(this.players.get(source).getPlayerID() + " goes Go Fish!");
+            takeCardFromPool(source);
+        }
 
     }
 
