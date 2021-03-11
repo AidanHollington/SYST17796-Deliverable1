@@ -76,6 +76,17 @@ public class GoFish extends Game {
     }
 
     /**
+     * Returns number of cards in a player's hand
+     *
+     * @author aidanhollington
+     * @param player which player to select
+     * @return number of cards in hand of selected player
+     */
+    public int getNumOfCards(int player) {
+        return this.players.get(player).cards.size();
+    }
+
+    /**
      * Creates a list of each card in a specified player's hand
      *
      * @author aidanhollington
@@ -159,13 +170,14 @@ public class GoFish extends Game {
             }
 
             // tell players how many cards they have
-            System.out.println();
+            for (int j = 0; i < this.players.size(); i++) {
+
+            }
 
 //            if (moveCards(selectedPlayer, currentPlayer, selectedValue) == 0) {
 //                System.out.println(this.players.get(selectedPlayer).getPlayerID() + " said Go Fish! They now get a random card from the pool.");
 //                addRandomCard(selectedPlayer);
 //            }
-
             if (checkForFourSuitsofSameRank(currentPlayer, selectedValue) == false) {
                 currentPlayer++;
             } else {
@@ -212,7 +224,7 @@ public class GoFish extends Game {
             for (int i = 0; i < this.players.get(source).cards.size(); i++) {
                 if (this.players.get(source).cards.get(i).getValue() == value) {
                     cardBuffer.add(this.players.get(source).cards.get(i));
-                    
+
                     this.players.get(source).cards.remove(i);
                 }
             }
