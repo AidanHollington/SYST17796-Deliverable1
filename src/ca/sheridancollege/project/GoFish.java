@@ -13,7 +13,7 @@ public class GoFish extends Game {
 
     // instance variables
     private int numOfPlayers;
-    private int handSize;
+    private final int handSize;
     private int cardsInPool = 52;
 
     // current player
@@ -57,17 +57,30 @@ public class GoFish extends Game {
     }
 
     /**
-     * Request another player for cards of a specified value
+     * Prints the contents of the selected players deck to the console
      *
-     * @param input Scanner object to use
+     * @author aidanhollington
+     * @param source which player to read
+     * @param input which scanner object to pass on
+     */
+    public void viewDeck(int source, Scanner input) {
+        System.out.println(this.players.get(source).getPlayerID() + "'s cards:");
+
+        for (int i = 0; i < this.players.get(source).cards.size(); i++) {
+            System.out.println("Card " + (i + 1) + ": " + this.players.get(source).cards.get(i).getSuit() + ", " + this.players.get(source).cards.get(i).getValue());
+        }
+        menu(input);
+    }
+
+    /**
+     * Prompts the current player to request cards of a certain value from
+     * another player
+     *
+     * @author aidanhollington
+     * @param input which scanner object to use
      */
     public void askPlayerForCards(Scanner input) {
-        // ask player for a valid player number
         while (true) {
-
-            // print how many cards are remaining in the pool
-            System.out.println(this.cardsInPool + " card(s) remaining in pool.");
-
             // ask which other player the player wants to ask
             System.out.print("It is " + this.players.get(currentPlayer).getPlayerID() + "'s turn. Who do you want to ask? (1-" + this.players.size() + "): ");
             this.selectedPlayer = input.nextInt();
@@ -76,7 +89,7 @@ public class GoFish extends Game {
             System.out.println();
 
             // verify input
-            if (this.selectedPlayer > 0 && this.selectedPlayer <= this.players.size() && this.selectedPlayer != this.currentPlayer) {
+            if (this.selectedPlayer > 0 && this.selectedPlayer <= this.players.size()) {
                 break;
             } else {
                 System.out.println("\nPlease enter a valid player number.");
@@ -99,22 +112,77 @@ public class GoFish extends Game {
         }
 
         // move all cards of a selected value from the selected player to the current player
-        this.moveCards(this.selectedPlayer, this.currentPlayer, this.selectedValue);
+        int cardsMoved = this.moveCards(this.selectedPlayer, this.currentPlayer, this.selectedValue);
 
+        if (cardsMoved == 0) {
+            System.out.println(this.players.get(this.selectedPlayer).getPlayerID() + " did not have any cards with a value of " + this.selectedValue);
+        } else {
+            // if more than one card was moved, use cards (plural). otherwise, say card.
+            if (cardsMoved == 1) {
+                System.out.println(this.players.get(this.selectedPlayer).getPlayerID() + " took " + cardsMoved + " card with a value " + this.selectedValue);
+            } else if (cardsMoved > 1) {
+                System.out.println(this.players.get(this.selectedPlayer).getPlayerID() + " took " + cardsMoved + " cards with a value " + this.selectedValue);
+            }
+
+        }
     }
 
     /**
-     * Creates a player object for each player, using their names
+     * Main menu for the game
+     *
+     * @author aidanhollington
+     * @param input Scanner object to use
+     */
+    public void menu(Scanner input) {
+
+        // stores the users selection
+        String option;
+
+        // print how many cards are remaining in the pool
+        System.out.println(this.cardsInPool + " card(s) remaining in pool.");
+
+        while (true) {
+            // ask what the player wants to do
+            System.out.print("It is " + this.players.get(currentPlayer).getPlayerID() + "'s turn. What do you want to do? (viewdeck/askforcard): ");
+            option = input.next();
+
+            // line break
+            System.out.println();
+
+            // verify input
+            if (option.equals("viewdeck")) {
+                viewDeck(currentPlayer, input);
+            } else if (option.equals("askforcard")) {
+                askPlayerForCards(input);
+            } else {
+                System.out.println("\nPlease enter a valid player number.");
+            }
+
+            // check if player has four suits of the same value
+            if (checkForFourSuitsofSameRank(this.currentPlayer, this.selectedValue) == false) {
+                this.currentPlayer++;
+            } else {
+                System.out.println("You have all four suits, you now get an extra turn!");
+            }
+
+            // make sure the current player index never goes above the max number of players for the session
+            this.currentPlayer = this.currentPlayer % this.numOfPlayers;
+
+        }
+    }
+
+    /**
+     * Creates a player object for each player, using names from a String array
      *
      * @author aidanhollington
      * @param playerNames String array containing names of each player
      */
-    public void setUp(String[] playerNames) {
+    public void setup(String[] playerNames) {
         // set variable for number of players
         this.numOfPlayers = playerNames.length;
 
-        for (int i = 0; i < playerNames.length; i++) {
-            this.players.add(new Player(playerNames[i], this.handSize));
+        for (String playerName : playerNames) {
+            this.players.add(new Player(playerName, this.handSize));
         }
     }
 
@@ -185,18 +253,8 @@ public class GoFish extends Game {
                 this.gameActive = false;
             }
 
-            // turn handling
-            this.askPlayerForCards(input);
-
-            // check if player has four suits of the same value
-            if (checkForFourSuitsofSameRank(this.currentPlayer, this.selectedValue) == false) {
-                this.currentPlayer++;
-            } else {
-                System.out.println("You have all four suits, you now get an extra turn!");
-            }
-
-            // make sure the current player index never goes above the max number of players for the session
-            this.currentPlayer = this.currentPlayer % this.numOfPlayers;
+            // enter menu system
+            this.menu(input);
 
         } while (this.gameActive);
 
@@ -219,8 +277,8 @@ public class GoFish extends Game {
     /**
      * Adds a card with a specified suit and value to a specified player
      *
-     * @param suit which suit of card to add
-     * @param value which value of card to add
+     * @author aidanhollington
+     * @param cards ArrayList containing Card objects
      * @param destination which player to add to
      */
     public void addCard(ArrayList<Card> cards, int destination) {
@@ -230,6 +288,7 @@ public class GoFish extends Game {
     /**
      * Take all cards of a specified value from a specified player
      *
+     * @author aidanhollington
      * @param value which value of card(s) to take
      * @param source which player to take from
      * @return all of the cards removed
@@ -298,7 +357,9 @@ public class GoFish extends Game {
         boolean spades = false;
         boolean clubs = false;
 
+        // loop though players entire deck of cards and check if there are four cards of the same suit
         for (int i = 0; i < this.players.get(source).cards.size(); i++) {
+
             //check if card has a suit of hearts, and if so flag it
             if (this.players.get(source).cards.get(i).getSuit().equals(SUITS[0]) && this.players.get(source).cards.get(i).getValue() == value) {
                 hearts = true;
@@ -321,6 +382,7 @@ public class GoFish extends Game {
 
         }
 
+        // if cards were found, return true, otherwise return false
         if (hearts == true && diamonds == true && spades == true && clubs == true) {
             return true;
         } else {
