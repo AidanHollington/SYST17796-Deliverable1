@@ -58,6 +58,7 @@ public class GoFish extends Game {
 
     /**
      * Request another player for cards of a specified value
+     *
      * @param input Scanner object to use
      */
     public void askPlayerForCards(Scanner input) {
@@ -96,6 +97,10 @@ public class GoFish extends Game {
                 System.out.println("\nPlease enter a valid card value.");
             }
         }
+
+        // move all cards of a selected value from the selected player to the current player
+        this.moveCards(this.selectedPlayer, this.currentPlayer, this.selectedValue);
+
     }
 
     /**
@@ -107,7 +112,7 @@ public class GoFish extends Game {
     public void setUp(String[] playerNames) {
         // set variable for number of players
         this.numOfPlayers = playerNames.length;
-        
+
         for (int i = 0; i < playerNames.length; i++) {
             this.players.add(new Player(playerNames[i], this.handSize));
         }
@@ -190,7 +195,7 @@ public class GoFish extends Game {
                 System.out.println("You have all four suits, you now get an extra turn!");
             }
 
-            // if the current player 
+            // make sure the current player index never goes above the max number of players for the session
             this.currentPlayer = this.currentPlayer % this.numOfPlayers;
 
         } while (this.gameActive);
@@ -213,12 +218,13 @@ public class GoFish extends Game {
 
     /**
      * Adds a card with a specified suit and value to a specified player
+     *
      * @param suit which suit of card to add
      * @param value which value of card to add
      * @param destination which player to add to
      */
-    public void addCard(String suit, int value, int destination) {
-        this.players.get(destination).cards.add(new Card(suit, value));
+    public void addCard(ArrayList<Card> cards, int destination) {
+        this.players.get(destination).cards.addAll(cards);
     }
 
     /**
@@ -241,7 +247,6 @@ public class GoFish extends Game {
             for (int i = 0; i < this.players.get(source).cards.size(); i++) {
                 if (this.players.get(source).cards.get(i).getValue() == value) {
                     cardBuffer.add(this.players.get(source).cards.get(i));
-
                     this.players.get(source).cards.remove(i);
                 }
             }
@@ -272,7 +277,7 @@ public class GoFish extends Game {
             takeCardFromPool(source);
         } else if (cardBuffer.isEmpty() == false) {
             // if cards were taken from source player, add all cards from source to destination player
-            this.players.get(destination).cards.addAll(cardBuffer);
+            this.addCard(cardBuffer, destination);
         }
 
         // return number of cards moved in operation
@@ -285,25 +290,38 @@ public class GoFish extends Game {
      * @author aidanhollington
      * @param source which player to check
      * @param value which value to search for
-     * @return number of cards found
+     * @return whether four suits of the same rank were found
      */
     public boolean checkForFourSuitsofSameRank(int source, int value) {
-        int cardsCounted = 0;
-        Card[] cards = new Card[4];
+        boolean hearts = false;
+        boolean diamonds = false;
+        boolean spades = false;
+        boolean clubs = false;
 
-        cards[0] = new Card("Hearts", value);
-        cards[1] = new Card("Diamonds", value);
-        cards[2] = new Card("Spades", value);
-        cards[3] = new Card("Clubs", value);
-
-        // search selected player ID 
-        for (int i = 0; i < cards.length; i++) {
-            if (this.players.get(source).cards.indexOf(cards[i]) != -1) {
-                cardsCounted++;
+        for (int i = 0; i < this.players.get(source).cards.size(); i++) {
+            //check if card has a suit of hearts, and if so flag it
+            if (this.players.get(source).cards.get(i).getSuit().equals(SUITS[0]) && this.players.get(source).cards.get(i).getValue() == value) {
+                hearts = true;
             }
+
+            //check if card has a suit of diamonds, and if so flag it
+            if (this.players.get(source).cards.get(i).getSuit().equals(SUITS[1]) && this.players.get(source).cards.get(i).getValue() == value) {
+                diamonds = true;
+            }
+
+            //check if card has a suit of spades, and if so flag it
+            if (this.players.get(source).cards.get(i).getSuit().equals(SUITS[2]) && this.players.get(source).cards.get(i).getValue() == value) {
+                spades = true;
+            }
+
+            //check if card has a suit of clubs, and if so flag it
+            if (this.players.get(source).cards.get(i).getSuit().equals(SUITS[3]) && this.players.get(source).cards.get(i).getValue() == value) {
+                clubs = true;
+            }
+
         }
 
-        if (cardsCounted == 4) {
+        if (hearts == true && diamonds == true && spades == true && clubs == true) {
             return true;
         } else {
             return false;
