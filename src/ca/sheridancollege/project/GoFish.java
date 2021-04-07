@@ -19,6 +19,18 @@ public class GoFish extends Game {
     private int cardsInPool = 52;
     private int numberOfTurns = 0;
 
+    // current player
+    public int currentPlayer = 0;
+
+    // player selected by current player
+    public int selectedPlayer;
+
+    // which value the current player selected
+    public int selectedValue;
+
+    // string representation of each player's name
+    public String playerString = "";
+
     // random object
     Random ran = new Random();
 
@@ -26,7 +38,7 @@ public class GoFish extends Game {
     private boolean gameActive = true;
 
     // the players of the game
-    private ArrayList<Player> players;
+    public ArrayList<Player> players;
 
     // list of possible suits
     private final String[] SUITS = {"Hearts", "Diamonds", "Spades", "Clubs"};
@@ -44,6 +56,10 @@ public class GoFish extends Game {
 
         // create ArrayList to hold each player's information
         this.players = new ArrayList();
+
+    }
+
+    public void requestCard() {
 
     }
 
@@ -106,19 +122,7 @@ public class GoFish extends Game {
      * @param input which Scanner object to use
      */
     public void play(Scanner input) {
-        // string representation of each player's name
-        String playerString = "";
-
         int i = 0;
-
-        // current player
-        int currentPlayer = 0;
-
-        // player selected by current player
-        int selectedPlayer;
-        
-        // which value the current player selected
-        int selectedValue;
 
         // create string representation of each player's name
         for (i = 1; i < this.players.size(); i++) {
@@ -198,16 +202,19 @@ public class GoFish extends Game {
         this.cardsInPool -= 1;
     }
 
+    public void addCard(String suit, int value, int destination) {
+        this.players.get(destination).cards.add(new Card(suit, value));
+    }
+
     /**
-     * Move all cards of a specific value from one player to another
+     * Take all cards of a specified value from a specified player
      *
-     * @author aidanhollington
-     * @param source ID of player to move from
-     * @param destination ID of player to move to
-     * @param value what value should be moved
-     * @return number of cards moved
+     * @param value which value of card(s) to take
+     * @param source which player to take from
+     * @return all of the cards removed
      */
-    public void moveCards(int source, int destination, int value) {
+    public ArrayList<Card> takeCards(int value, int source) {
+
         // how many card checks were performed
         int iterations = 0;
 
@@ -226,15 +233,35 @@ public class GoFish extends Game {
             iterations++;
         } while (iterations < Math.pow(this.players.get(source).cards.size(), 2));
 
-        // add all cards from buffer to destination player
-        this.players.get(destination).cards.addAll(cardBuffer);
+        return cardBuffer;
+
+    }
+
+    /**
+     * Move all cards of a specific value from one player to another
+     *
+     * @author aidanhollington
+     * @param source ID of player to move from
+     * @param destination ID of player to move to
+     * @param value what value should be moved
+     * @return number of cards moved
+     */
+    public int moveCards(int source, int destination, int value) {
+
+        // take cards from source player and store them in cardBuffer
+        ArrayList<Card> cardBuffer = this.takeCards(value, source);
 
         // if no cards were moved, say go fish
         if (cardBuffer.size() == 0) {
             System.out.println(this.players.get(source).getPlayerID() + " goes Go Fish!");
             takeCardFromPool(source);
+        } else if (cardBuffer.size() > 0) {
+            // if cards were taken from source player, add all cards from source to destination player
+            this.players.get(destination).cards.addAll(cardBuffer);
         }
 
+        // return number of cards moved in operation
+        return cardBuffer.size();
     }
 
     /**
