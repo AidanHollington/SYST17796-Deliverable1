@@ -37,7 +37,7 @@ public class PlayGame {
                 } else {
                     break;
                 }
-            } catch (Exception e) {
+            } catch (NumberFormatException e) {
                 System.out.println("\nPlease enter a number.");
             }
 
@@ -60,7 +60,7 @@ public class PlayGame {
         }
 
         // create the players
-        game.setUp(playerNames);
+        game.setup(playerNames);
 
         // deal hands to each player
         game.dealHands();
