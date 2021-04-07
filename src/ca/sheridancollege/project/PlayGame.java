@@ -1,6 +1,5 @@
 package ca.sheridancollege.project;
 
-import java.util.ArrayList;
 import java.util.Scanner;
 
 /**
@@ -9,7 +8,7 @@ import java.util.Scanner;
  * @author aidanhollington
  */
 public class PlayGame {
-    
+
     public static void main(String[] args) {
         // create Scanner class
         Scanner input = new Scanner(System.in);
@@ -21,22 +20,31 @@ public class PlayGame {
         String[] playerNames;
 
         // number of players
-        int numOfPlayers;
+        String numOfPlayers;
 
         // prompt for number of players
         while (true) {
             System.out.print("How many players would like to play? ");
-            numOfPlayers = input.nextInt();
-            
-            if (numOfPlayers < 2) {
-                System.out.println("\nGo Fish requires at least two players.");
-            } else {
-                break;
+
+            // try to parse user input as int. if an exception is thrown, ask
+            // the user to enter a number, else check if the number of players
+            // is 2 or more
+            try {
+                numOfPlayers = input.next();
+
+                if (Integer.parseInt(numOfPlayers) < 2) {
+                    System.out.println("\nGo Fish requires at least two players.");
+                } else {
+                    break;
+                }
+            } catch (Exception e) {
+                System.out.println("\nPlease enter a number.");
             }
+
         }
 
         // set size of player names array according to number of players
-        playerNames = new String[numOfPlayers];
+        playerNames = new String[Integer.parseInt(numOfPlayers)];
 
         // ask each player for their name
         for (int i = 0; i < playerNames.length; i++) {
@@ -45,20 +53,20 @@ public class PlayGame {
         }
 
         // Determine the hand size, seven for two or three players, five for 4 or more
-        if (numOfPlayers > 3) {
+        if (Integer.parseInt(numOfPlayers) > 3) {
             game = new GoFish(5);
         } else {
             game = new GoFish(7);
         }
-        
-        // setup the players
+
+        // create the players
         game.setUp(playerNames);
 
         // deal hands to each player
         game.dealHands();
-        
-        // play the game
+
+        // start the game
         game.play(input);
-        
+
     }
 }
