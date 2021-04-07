@@ -105,6 +105,9 @@ public class GoFish extends Game {
      * @param playerNames String array containing names of each player
      */
     public void setUp(String[] playerNames) {
+        // set variable for number of players
+        this.numOfPlayers = playerNames.length;
+        
         for (int i = 0; i < playerNames.length; i++) {
             this.players.add(new Player(playerNames[i], this.handSize));
         }
@@ -157,37 +160,42 @@ public class GoFish extends Game {
      * @param input which Scanner object to use
      */
     public void play(Scanner input) {
+        // iterator
         int i = 0;
 
         // create string representation of each player's name
         for (i = 1; i < this.players.size(); i++) {
-            playerString += this.players.get(i - 1).getPlayerID() + " (player " + i + ")" + ", ";
+            this.playerString += this.players.get(i - 1).getPlayerID() + " (player " + i + ")" + ", ";
         }
 
-        playerString += this.players.get(i - 1).getPlayerID() + " (player " + (i) + ")";
+        this.playerString += this.players.get(i - 1).getPlayerID() + " (player " + (i) + ")";
 
         // main game loop
         do {
+            // tell each player how many cards they have
             printPlayerCardCounts();
 
+            // if there are no more cards in the pool, exit the game
             if (this.cardsInPool == 0) {
                 this.gameActive = false;
             }
 
+            // turn handling
             this.askPlayerForCards(input);
 
             // check if player has four suits of the same value
-            if (checkForFourSuitsofSameRank(currentPlayer, selectedValue) == false) {
-                currentPlayer++;
+            if (checkForFourSuitsofSameRank(this.currentPlayer, this.selectedValue) == false) {
+                this.currentPlayer++;
             } else {
                 System.out.println("You have all four suits, you now get an extra turn!");
             }
 
-            currentPlayer = currentPlayer % 3;
+            // if the current player 
+            this.currentPlayer = this.currentPlayer % this.numOfPlayers;
 
         } while (this.gameActive);
 
-        // if game is over, declare winner
+        // when game is over, declare winner
         declareWinner();
 
     }
@@ -196,13 +204,19 @@ public class GoFish extends Game {
      * Adds a random card to the specified player's hand
      *
      * @author aidanhollington
-     * @param playerNum which player to add to
+     * @param destination which player to add to
      */
-    public void takeCardFromPool(int playerNum) {
-        this.players.get(playerNum).cards.add(new Card(SUITS[this.ran.nextInt(3)], this.ran.nextInt(13) + 1));
+    public void takeCardFromPool(int destination) {
+        this.players.get(destination).cards.add(new Card(SUITS[this.ran.nextInt(3)], this.ran.nextInt(13) + 1));
         this.cardsInPool -= 1;
     }
 
+    /**
+     * Adds a card with a specified suit and value to a specified player
+     * @param suit which suit of card to add
+     * @param value which value of card to add
+     * @param destination which player to add to
+     */
     public void addCard(String suit, int value, int destination) {
         this.players.get(destination).cards.add(new Card(suit, value));
     }
@@ -253,10 +267,10 @@ public class GoFish extends Game {
         ArrayList<Card> cardBuffer = this.takeCards(value, source);
 
         // if no cards were moved, say go fish
-        if (cardBuffer.size() == 0) {
+        if (cardBuffer.isEmpty()) {
             System.out.println(this.players.get(source).getPlayerID() + " goes Go Fish!");
             takeCardFromPool(source);
-        } else if (cardBuffer.size() > 0) {
+        } else if (cardBuffer.isEmpty() == false) {
             // if cards were taken from source player, add all cards from source to destination player
             this.players.get(destination).cards.addAll(cardBuffer);
         }
@@ -269,11 +283,11 @@ public class GoFish extends Game {
      * Check if a player has four suits of the same value
      *
      * @author aidanhollington
-     * @param playerNum which player to add to
+     * @param source which player to check
      * @param value which value to search for
      * @return number of cards found
      */
-    public boolean checkForFourSuitsofSameRank(int playerNum, int value) {
+    public boolean checkForFourSuitsofSameRank(int source, int value) {
         int cardsCounted = 0;
         Card[] cards = new Card[4];
 
@@ -284,7 +298,7 @@ public class GoFish extends Game {
 
         // search selected player ID 
         for (int i = 0; i < cards.length; i++) {
-            if (this.players.get(playerNum).cards.indexOf(cards[i]) != -1) {
+            if (this.players.get(source).cards.indexOf(cards[i]) != -1) {
                 cardsCounted++;
             }
         }
