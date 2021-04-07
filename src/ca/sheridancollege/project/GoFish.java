@@ -1,7 +1,5 @@
 package ca.sheridancollege.project;
 
-import ca.sheridancollege.project.Game;
-import ca.sheridancollege.project.Player;
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.Scanner;
@@ -17,7 +15,6 @@ public class GoFish extends Game {
     private int numOfPlayers;
     private int handSize;
     private int cardsInPool = 52;
-    private int numberOfTurns = 0;
 
     // current player
     public int currentPlayer = 0;
@@ -59,8 +56,46 @@ public class GoFish extends Game {
 
     }
 
-    public void requestCard() {
+    /**
+     * Request another player for cards of a specified value
+     * @param input Scanner object to use
+     */
+    public void askPlayerForCards(Scanner input) {
+        // ask player for a valid player number
+        while (true) {
 
+            // print how many cards are remaining in the pool
+            System.out.println(this.cardsInPool + " card(s) remaining in pool.");
+
+            // ask which other player the player wants to ask
+            System.out.print("It is " + this.players.get(currentPlayer).getPlayerID() + "'s turn. Who do you want to ask? (1-" + this.players.size() + "): ");
+            this.selectedPlayer = input.nextInt();
+
+            // line break
+            System.out.println();
+
+            // verify input
+            if (this.selectedPlayer > 0 && this.selectedPlayer <= this.players.size() && this.selectedPlayer != this.currentPlayer) {
+                break;
+            } else {
+                System.out.println("\nPlease enter a valid player number.");
+            }
+        }
+
+        // convert player number to index for ArrayList
+        selectedPlayer = selectedPlayer - 1;
+
+        // ask player for a valid card value
+        while (true) {
+            System.out.print("Which value of card do you want from " + this.players.get(this.selectedPlayer).getPlayerID() + "? (1-13) ");
+            this.selectedValue = input.nextInt();
+
+            if (this.selectedValue >= 1 && this.selectedValue <= 13) {
+                break;
+            } else {
+                System.out.println("\nPlease enter a valid card value.");
+            }
+        }
     }
 
     /**
@@ -71,7 +106,7 @@ public class GoFish extends Game {
      */
     public void setUp(String[] playerNames) {
         for (int i = 0; i < playerNames.length; i++) {
-            players.add(new Player(playerNames[i], this.handSize));
+            this.players.add(new Player(playerNames[i], this.handSize));
         }
     }
 
@@ -139,41 +174,7 @@ public class GoFish extends Game {
                 this.gameActive = false;
             }
 
-            // ask player for a valid player number
-            while (true) {
-
-                // print how many cards are remaining in the pool
-                System.out.println(cardsInPool + " card(s) remaining in pool.");
-
-                // ask which other player the player wants to ask
-                System.out.print("It is " + this.players.get(currentPlayer).getPlayerID() + "'s turn. Who do you want to ask? (1-" + this.players.size() + "): ");
-                selectedPlayer = input.nextInt();
-
-                // line break
-                System.out.println();
-
-                // verify input
-                if (selectedPlayer >= 1 && selectedPlayer <= this.players.size()) {
-                    break;
-                } else {
-                    System.out.println("\nPlease enter a valid player number.");
-                }
-            }
-
-            // convert player number to index for ArrayList
-            selectedPlayer = selectedPlayer - 1;
-
-            // ask player for a valid card value
-            while (true) {
-                System.out.print("Which value of card do you want from " + this.players.get(selectedPlayer).getPlayerID() + "? (1-13) ");
-                selectedValue = input.nextInt();
-
-                if (selectedValue >= 1 && selectedValue <= 13) {
-                    break;
-                } else {
-                    System.out.println("\nPlease enter a valid card value.");
-                }
-            }
+            this.askPlayerForCards(input);
 
             // check if player has four suits of the same value
             if (checkForFourSuitsofSameRank(currentPlayer, selectedValue) == false) {
