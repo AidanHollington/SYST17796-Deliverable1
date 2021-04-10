@@ -10,6 +10,9 @@ import java.util.Scanner;
  * @author aidanhollington
  */
 public class GoFish extends Game {
+    
+    // instance of MenuSystem
+    MenuSystem menuSystem = new MenuSystem();
 
     // instance variables
     private int numOfPlayers;
@@ -57,121 +60,6 @@ public class GoFish extends Game {
     }
 
     /**
-     * Prints the contents of the selected players deck to the console
-     *
-     * @author aidanhollington
-     * @param source which player to read
-     * @param input which scanner object to pass on
-     */
-    public void viewDeck(int source, Scanner input) {
-        System.out.println(this.players.get(source).getPlayerID() + "'s cards:");
-
-        for (int i = 0; i < this.players.get(source).cards.size(); i++) {
-            System.out.println("Card " + (i + 1) + ": " + this.players.get(source).cards.get(i).getSuit() + ", " + this.players.get(source).cards.get(i).getValue());
-        }
-        menu(input);
-    }
-
-    /**
-     * Prompts the current player to request cards of a certain value from
-     * another player
-     *
-     * @author aidanhollington
-     * @param input which scanner object to use
-     */
-    public void askPlayerForCards(Scanner input) {
-        while (true) {
-            // ask which other player the player wants to ask
-            System.out.print("It is " + this.players.get(currentPlayer).getPlayerID() + "'s turn. Who do you want to ask? (1-" + this.players.size() + "): ");
-            this.selectedPlayer = input.nextInt();
-
-            // line break
-            System.out.println();
-
-            // verify input
-            if (this.selectedPlayer > 0 && this.selectedPlayer <= this.players.size()) {
-                break;
-            } else {
-                System.out.println("\nPlease enter a valid player number.");
-            }
-        }
-
-        // convert player number to index for ArrayList
-        selectedPlayer = selectedPlayer - 1;
-
-        // ask player for a valid card value
-        while (true) {
-            System.out.print("Which value of card do you want from " + this.players.get(this.selectedPlayer).getPlayerID() + "? (1-13) ");
-            this.selectedValue = input.nextInt();
-
-            if (this.selectedValue >= 1 && this.selectedValue <= 13) {
-                break;
-            } else {
-                System.out.println("\nPlease enter a valid card value.");
-            }
-        }
-
-        // move all cards of a selected value from the selected player to the current player
-        int cardsMoved = this.moveCards(this.selectedPlayer, this.currentPlayer, this.selectedValue);
-
-        if (cardsMoved == 0) {
-            System.out.println(this.players.get(this.selectedPlayer).getPlayerID() + " did not have any cards with a value of " + this.selectedValue);
-        } else {
-            // if more than one card was moved, use cards (plural). otherwise, say card.
-            if (cardsMoved == 1) {
-                System.out.println(this.players.get(this.selectedPlayer).getPlayerID() + " took " + cardsMoved + " card with a value " + this.selectedValue);
-            } else if (cardsMoved > 1) {
-                System.out.println(this.players.get(this.selectedPlayer).getPlayerID() + " took " + cardsMoved + " cards with a value " + this.selectedValue);
-            }
-
-        }
-    }
-
-    /**
-     * Main menu for the game
-     *
-     * @author aidanhollington
-     * @param input Scanner object to use
-     */
-    public void menu(Scanner input) {
-
-        // stores the users selection
-        String option;
-
-        // print how many cards are remaining in the pool
-        System.out.println(this.cardsInPool + " card(s) remaining in pool.");
-
-        while (true) {
-            // ask what the player wants to do
-            System.out.print("It is " + this.players.get(currentPlayer).getPlayerID() + "'s turn. What do you want to do? (viewdeck/askforcard): ");
-            option = input.next();
-
-            // line break
-            System.out.println();
-
-            // verify input
-            if (option.equals("viewdeck")) {
-                viewDeck(currentPlayer, input);
-            } else if (option.equals("askforcard")) {
-                askPlayerForCards(input);
-            } else {
-                System.out.println("\nPlease enter a valid player number.");
-            }
-
-            // check if player has four suits of the same value
-            if (checkForFourSuitsofSameRank(this.currentPlayer, this.selectedValue) == false) {
-                this.currentPlayer++;
-            } else {
-                System.out.println("You have all four suits, you now get an extra turn!");
-            }
-
-            // make sure the current player index never goes above the max number of players for the session
-            this.currentPlayer = this.currentPlayer % this.numOfPlayers;
-
-        }
-    }
-
-    /**
      * Creates a player object for each player, using names from a String array
      *
      * @author aidanhollington
@@ -202,29 +90,6 @@ public class GoFish extends Game {
         }
     }
 
-    /**
-     * Returns number of cards in a player's hand
-     *
-     * @author aidanhollington
-     * @param player which player to select
-     * @return number of cards in hand of selected player
-     */
-    public int getNumOfCards(int player) {
-        return this.players.get(player).cards.size();
-    }
-
-    /**
-     * Prints a formatted list of each player, and the number of cards they have
-     *
-     * @author aidanhollington
-     */
-    public void printPlayerCardCounts() {
-        // tell players how many cards they have
-        for (int i = 0; i < this.players.size(); i++) {
-            System.out.println(this.players.get(i).getPlayerID() + " has " + getNumOfCards(i) + " cards.");
-        }
-    }
-
     @Override
     /**
      * Plays the game
@@ -252,6 +117,9 @@ public class GoFish extends Game {
             if (this.cardsInPool == 0) {
                 this.gameActive = false;
             }
+
+            // print how many cards are remaining in the pool
+            System.out.println(this.cardsInPool + " card(s) remaining in pool.");
 
             // enter menu system
             this.menu(input);
