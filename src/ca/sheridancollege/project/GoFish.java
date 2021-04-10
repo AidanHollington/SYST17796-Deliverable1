@@ -10,7 +10,7 @@ import java.util.Scanner;
  * @author aidanhollington
  */
 public class GoFish extends Game {
-    
+
     // instance of MenuSystem
     MenuSystem menuSystem = new MenuSystem();
 
@@ -101,6 +101,9 @@ public class GoFish extends Game {
         // iterator
         int i = 0;
 
+        // stores the current player's command
+        String option;
+
         // create string representation of each player's name
         for (i = 1; i < this.players.size(); i++) {
             this.playerString += this.players.get(i - 1).getPlayerID() + " (player " + i + ")" + ", ";
@@ -111,7 +114,7 @@ public class GoFish extends Game {
         // main game loop
         do {
             // tell each player how many cards they have
-            printPlayerCardCounts();
+            menuSystem.printPlayerCardCounts(players);
 
             // if there are no more cards in the pool, exit the game
             if (this.cardsInPool == 0) {
@@ -121,8 +124,40 @@ public class GoFish extends Game {
             // print how many cards are remaining in the pool
             System.out.println(this.cardsInPool + " card(s) remaining in pool.");
 
-            // enter menu system
-            this.menu(input);
+            // enter mainMenu system
+            option = menuSystem.mainMenu(this.players, this.currentPlayer, this.selectedValue, input);
+
+            if (option.equals("viewdeck")) {
+                menuSystem.viewDeck(this.players, this.currentPlayer);
+
+            } else if (option.equals("askforcard")) {
+                this.selectedValue = menuSystem.askPlayerForCards(players, currentPlayer, selectedPlayer, input);
+
+                // move all cards of a selected value from the selected player to the current player
+                int cardsMoved = moveCards(this.selectedPlayer, this.currentPlayer, this.selectedValue);
+
+                if (cardsMoved == 0) {
+                    System.out.println(this.players.get(this.selectedPlayer).getPlayerID() + " did not have any cards with a value of " + this.selectedValue);
+                } else {
+                    // if more than one card was moved, use cards (plural). otherwise, say card.
+                    if (cardsMoved == 1) {
+                        System.out.println(this.players.get(this.selectedPlayer).getPlayerID() + " took " + cardsMoved + " card with a value " + this.selectedValue);
+                    } else if (cardsMoved > 1) {
+                        System.out.println(this.players.get(this.selectedPlayer).getPlayerID() + " took " + cardsMoved + " cards with a value " + this.selectedValue);
+                    }
+
+                }
+            }
+
+            // check if player has four suits of the same value
+            if (checkForFourSuitsofSameRank(this.currentPlayer, this.selectedValue) == false && option.equals("askforcard")) {
+                this.currentPlayer++;
+            } else {
+                System.out.println("You have all four suits, you now get an extra turn!");
+            }
+
+            // make sure the current player index never goes above the max number of players for the session
+            currentPlayer = currentPlayer % players.size();
 
         } while (this.gameActive);
 

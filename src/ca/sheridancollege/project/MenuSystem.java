@@ -4,19 +4,19 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 /**
- * Class which creates a text-based menu for a card game
+ * Class which creates a text-based mainMenu for a card game
  *
  * @author aidanhollington
  */
 public class MenuSystem {
 
     /**
-     * Main menu for the game
+     * Main mainMenu for the game
      *
      * @author aidanhollington
      * @param input Scanner object to use
      */
-    public String menu(ArrayList<Player> players, int currentPlayer, int selectedValue, Scanner input) {
+    public String mainMenu(ArrayList<Player> players, int currentPlayer, int selectedValue, Scanner input) {
 
         // stores the users selection
         String option;
@@ -30,23 +30,15 @@ public class MenuSystem {
             System.out.println();
 
             // verify input
-            if (option.equals("viewdeck")) {
-                return option;
-            } else if (option.equals("askforcard")) {
-                return option;
-            } else {
-                System.out.println("\nPlease enter a valid player number.");
+            switch (option) {
+                case "viewdeck":
+                    return option;
+                case "askforcard":
+                    return option;
+                default:
+                    System.out.println("\nPlease enter a valid player number.");
+                    break;
             }
-
-            // check if player has four suits of the same value
-            if (checkForFourSuitsofSameRank(currentPlayer, selectedValue) == false) {
-                currentPlayer++;
-            } else {
-                System.out.println("You have all four suits, you now get an extra turn!");
-            }
-
-            // make sure the current player index never goes above the max number of players for the session
-            currentPlayer = currentPlayer % players.size();
 
         }
     }
@@ -58,23 +50,25 @@ public class MenuSystem {
      * @param source which player to read
      * @param input which scanner object to pass on
      */
-    public void viewDeck(ArrayList<Player> players, int source, Scanner input) {
+    public void viewDeck(ArrayList<Player> players, int source) {
         System.out.println(players.get(source).getPlayerID() + "'s cards:");
 
         for (int i = 0; i < players.get(source).cards.size(); i++) {
             System.out.println("Card " + (i + 1) + ": " + players.get(source).cards.get(i).getSuit() + ", " + players.get(source).cards.get(i).getValue());
         }
     }
-    
-    
-        /**
+
+    /**
      * Prompts the current player to request cards of a certain value from
      * another player
      *
      * @author aidanhollington
      * @param input which scanner object to use
      */
-    public void askPlayerForCards(ArrayList<Player> players, int currentPlayer, int selectedPlayer, Scanner input) {
+    public int askPlayerForCards(ArrayList<Player> players, int currentPlayer, int selectedPlayer, Scanner input) {
+
+        int selectedValue;
+
         while (true) {
             // ask which other player the player wants to ask
             System.out.print("It is " + players.get(currentPlayer).getPlayerID() + "'s turn. Who do you want to ask? (1-" + players.size() + "): ");
@@ -91,7 +85,7 @@ public class MenuSystem {
             }
         }
 
-        // convert player number to index for ArrayList
+        // convert inputted player number to index for ArrayList
         selectedPlayer = selectedPlayer - 1;
 
         // ask player for a valid card value
@@ -100,29 +94,15 @@ public class MenuSystem {
             selectedValue = input.nextInt();
 
             if (selectedValue >= 1 && selectedValue <= 13) {
-                break;
+                return selectedValue;
             } else {
                 System.out.println("\nPlease enter a valid card value.");
             }
         }
 
-        // move all cards of a selected value from the selected player to the current player
-        int cardsMoved = moveCards(selectedPlayer, currentPlayer, selectedValue);
-
-        if (cardsMoved == 0) {
-            System.out.println(players.get(selectedPlayer).getPlayerID() + " did not have any cards with a value of " + selectedValue);
-        } else {
-            // if more than one card was moved, use cards (plural). otherwise, say card.
-            if (cardsMoved == 1) {
-                System.out.println(players.get(selectedPlayer).getPlayerID() + " took " + cardsMoved + " card with a value " + selectedValue);
-            } else if (cardsMoved > 1) {
-                System.out.println(players.get(selectedPlayer).getPlayerID() + " took " + cardsMoved + " cards with a value " + selectedValue);
-            }
-
-        }
     }
-    
-        /**
+
+    /**
      * Prints a formatted list of each player, and the number of cards they have
      *
      * @author aidanhollington
@@ -133,5 +113,5 @@ public class MenuSystem {
             System.out.println(players.get(i).getPlayerID() + " has " + players.get(i).cards.size() + " cards.");
         }
     }
-    
+
 }
