@@ -112,6 +112,17 @@ public class MenuSystem {
     }
 
     /**
+     * Gets number of cards in a specified player's deck
+     *
+     * @param players which group of players to read from
+     * @param source which player from the group to read from
+     * @return card count of the player
+     */
+    public int getCardCountOfPlayer(ArrayList<Player> players, int source) {
+        return players.get(source).cards.size();
+    }
+
+    /**
      * Prints a formatted list of each player, and the number of cards they have
      *
      * @author aidanhollington
@@ -120,7 +131,7 @@ public class MenuSystem {
     public void printPlayerCardCounts(ArrayList<Player> players) {
         // tell players how many cards they have
         for (int i = 0; i < players.size(); i++) {
-            System.out.println(players.get(i).getPlayerID() + " has " + players.get(i).cards.size() + " cards.");
+            System.out.println(players.get(i).getPlayerID() + " has " + getCardCountOfPlayer(players, i) + " cards.");
         }
     }
 
