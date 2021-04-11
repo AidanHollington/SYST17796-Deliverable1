@@ -51,6 +51,9 @@ public class PlayGame {
             System.out.print("Enter the name of player " + (i + 1) + ": ");
             playerNames[i] = input.next();
         }
+        
+        // create line break
+        System.out.println();
 
         // Determine the hand size, seven for two or three players, five for 4 or more
         if (Integer.parseInt(numOfPlayers) > 3) {

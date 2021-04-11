@@ -11,12 +11,14 @@ import java.util.Scanner;
 public class MenuSystem {
 
     /**
-     * Main mainMenu for the game
+     * Main menu for the game
      *
      * @author aidanhollington
+     * @param players which group of players to read from
+     * @param currentPlayer which player has the current turn
      * @param input Scanner object to use
      */
-    public String mainMenu(ArrayList<Player> players, int currentPlayer, int selectedValue, Scanner input) {
+    public String mainMenu(ArrayList<Player> players, int currentPlayer, Scanner input) {
 
         // stores the users selection
         String option;
@@ -47,8 +49,8 @@ public class MenuSystem {
      * Prints the contents of the selected players deck to the console
      *
      * @author aidanhollington
-     * @param source which player to read
-     * @param input which scanner object to pass on
+     * @param players which group of players to read from
+     * @param source which player from the group to read from
      */
     public void viewDeck(ArrayList<Player> players, int source) {
         System.out.println(players.get(source).getPlayerID() + "'s cards:");
@@ -56,6 +58,10 @@ public class MenuSystem {
         for (int i = 0; i < players.get(source).cards.size(); i++) {
             System.out.println("Card " + (i + 1) + ": " + players.get(source).cards.get(i).getSuit() + ", " + players.get(source).cards.get(i).getValue());
         }
+
+        // create line break
+        System.out.println();
+
     }
 
     /**
@@ -63,20 +69,17 @@ public class MenuSystem {
      * another player
      *
      * @author aidanhollington
+     * @param players which group of players to read from
      * @param input which scanner object to use
      */
-    public int[] askPlayerForCards(ArrayList<Player> players, int currentPlayer, Scanner input) {
+    public int[] askPlayerForCards(ArrayList<Player> players, Scanner input) {
 
         int[] playerAndValue = new int[2];
-        
 
         while (true) {
             // ask which other player the player wants to ask
             System.out.print("Who do you want to ask? (1-" + players.size() + "): ");
             playerAndValue[0] = input.nextInt();
-
-            // line break
-            System.out.println();
 
             // verify input
             if (playerAndValue[0] > 0 && playerAndValue[0] <= players.size()) {
@@ -86,7 +89,7 @@ public class MenuSystem {
             }
         }
 
-        // convert inputted player number to index for ArrayList
+        // convert entered player number to index for ArrayList
         playerAndValue[0] = playerAndValue[0] - 1;
 
         // ask player for a valid card value
@@ -100,15 +103,19 @@ public class MenuSystem {
                 System.out.println("\nPlease enter a valid card value.");
             }
         }
-        
+
+        // create line break
+        System.out.println();
+
         return playerAndValue;
-        
+
     }
 
     /**
      * Prints a formatted list of each player, and the number of cards they have
      *
      * @author aidanhollington
+     * @param players which group of players to read from
      */
     public void printPlayerCardCounts(ArrayList<Player> players) {
         // tell players how many cards they have

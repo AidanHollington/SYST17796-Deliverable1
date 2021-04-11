@@ -103,7 +103,7 @@ public class GoFish extends Game {
 
         // stores the current player's command
         String option;
-        
+
         // temporary array to hold the selected player and value
         int[] selectedPlayerAndValue;
 
@@ -111,8 +111,9 @@ public class GoFish extends Game {
         for (i = 1; i < this.players.size(); i++) {
             this.playerString += this.players.get(i - 1).getPlayerID() + " (player " + i + ")" + ", ";
         }
-
         this.playerString += this.players.get(i - 1).getPlayerID() + " (player " + (i) + ")";
+
+        System.out.println(playerString);
 
         // main game loop
         do {
@@ -128,23 +129,23 @@ public class GoFish extends Game {
             System.out.println(this.cardsInPool + " card(s) remaining in pool.");
 
             // enter mainMenu system
-            option = menuSystem.mainMenu(this.players, this.currentPlayer, this.selectedValue, input);
+            option = menuSystem.mainMenu(this.players, this.currentPlayer, input);
 
             if (option.equals("viewdeck")) {
                 menuSystem.viewDeck(this.players, this.currentPlayer);
 
             } else if (option.equals("askforcard")) {
-                selectedPlayerAndValue = menuSystem.askPlayerForCards(this.players, this.currentPlayer, input);
+                selectedPlayerAndValue = menuSystem.askPlayerForCards(this.players, input);
                 this.selectedPlayer = selectedPlayerAndValue[0];
                 this.selectedValue = selectedPlayerAndValue[1];
-                
-                System.out.println(this.selectedPlayer);
 
                 // move all cards of a selected value from the selected player to the current player
                 int cardsMoved = moveCards(this.selectedPlayer, this.currentPlayer, this.selectedValue);
 
                 if (cardsMoved == 0) {
                     System.out.println(this.players.get(this.selectedPlayer).getPlayerID() + " did not have any cards with a value of " + this.selectedValue);
+                    // create line break
+                    System.out.println();
                 } else {
                     // if more than one card was moved, use cards (plural). otherwise, say card.
                     if (cardsMoved == 1) {
@@ -159,7 +160,7 @@ public class GoFish extends Game {
             // check if player has four suits of the same value
             if (checkForFourSuitsofSameRank(this.currentPlayer, this.selectedValue) == false && option.equals("askforcard")) {
                 this.currentPlayer++;
-            } else if (option.equals("askforcard")){
+            } else if (option.equals("askforcard")) {
                 System.out.println("You have all four suits, you now get an extra turn!");
             }
 
