@@ -117,13 +117,9 @@ public class GoFish extends Game {
 
         // main game loop
         do {
+
             // tell each player how many cards they have
             menuSystem.printPlayerCardCounts(players);
-
-            // if there are no more cards in the pool, exit the game
-            if (this.cardsInPool == 0) {
-                this.gameActive = false;
-            }
 
             // print how many cards are remaining in the pool
             System.out.println(this.cardsInPool + " card(s) remaining in pool.");
@@ -147,6 +143,11 @@ public class GoFish extends Game {
                     // create line break
                     System.out.println();
                 } else {
+                    // if there are no more cards in the pool, exit the game
+                    if (this.cardsInPool < 1) {
+                        this.gameActive = false;
+                    }
+
                     // if more than one card was moved, use cards (plural). otherwise, say card.
                     if (cardsMoved == 1) {
                         System.out.println(this.players.get(this.selectedPlayer).getPlayerID() + " took " + cardsMoved + " card with a value " + this.selectedValue);
@@ -155,6 +156,11 @@ public class GoFish extends Game {
                     }
 
                 }
+            }
+
+            // if there are no more cards in the pool, exit the game
+            if (this.cardsInPool < 1) {
+                this.gameActive = false;
             }
 
             // check if player has four suits of the same value
