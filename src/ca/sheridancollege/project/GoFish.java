@@ -103,6 +103,9 @@ public class GoFish extends Game {
 
         // stores the current player's command
         String option;
+        
+        // temporary array to hold the selected player and value
+        int[] selectedPlayerAndValue;
 
         // create string representation of each player's name
         for (i = 1; i < this.players.size(); i++) {
@@ -131,7 +134,11 @@ public class GoFish extends Game {
                 menuSystem.viewDeck(this.players, this.currentPlayer);
 
             } else if (option.equals("askforcard")) {
-                this.selectedValue = menuSystem.askPlayerForCards(players, currentPlayer, selectedPlayer, input);
+                selectedPlayerAndValue = menuSystem.askPlayerForCards(this.players, this.currentPlayer, input);
+                this.selectedPlayer = selectedPlayerAndValue[0];
+                this.selectedValue = selectedPlayerAndValue[1];
+                
+                System.out.println(this.selectedPlayer);
 
                 // move all cards of a selected value from the selected player to the current player
                 int cardsMoved = moveCards(this.selectedPlayer, this.currentPlayer, this.selectedValue);
@@ -152,7 +159,7 @@ public class GoFish extends Game {
             // check if player has four suits of the same value
             if (checkForFourSuitsofSameRank(this.currentPlayer, this.selectedValue) == false && option.equals("askforcard")) {
                 this.currentPlayer++;
-            } else {
+            } else if (option.equals("askforcard")){
                 System.out.println("You have all four suits, you now get an extra turn!");
             }
 

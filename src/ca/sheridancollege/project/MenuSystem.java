@@ -65,20 +65,21 @@ public class MenuSystem {
      * @author aidanhollington
      * @param input which scanner object to use
      */
-    public int askPlayerForCards(ArrayList<Player> players, int currentPlayer, int selectedPlayer, Scanner input) {
+    public int[] askPlayerForCards(ArrayList<Player> players, int currentPlayer, Scanner input) {
 
-        int selectedValue;
+        int[] playerAndValue = new int[2];
+        
 
         while (true) {
             // ask which other player the player wants to ask
-            System.out.print("It is " + players.get(currentPlayer).getPlayerID() + "'s turn. Who do you want to ask? (1-" + players.size() + "): ");
-            selectedPlayer = input.nextInt();
+            System.out.print("Who do you want to ask? (1-" + players.size() + "): ");
+            playerAndValue[0] = input.nextInt();
 
             // line break
             System.out.println();
 
             // verify input
-            if (selectedPlayer > 0 && selectedPlayer <= players.size()) {
+            if (playerAndValue[0] > 0 && playerAndValue[0] <= players.size()) {
                 break;
             } else {
                 System.out.println("\nPlease enter a valid player number.");
@@ -86,20 +87,22 @@ public class MenuSystem {
         }
 
         // convert inputted player number to index for ArrayList
-        selectedPlayer = selectedPlayer - 1;
+        playerAndValue[0] = playerAndValue[0] - 1;
 
         // ask player for a valid card value
         while (true) {
-            System.out.print("Which value of card do you want from " + players.get(selectedPlayer).getPlayerID() + "? (1-13) ");
-            selectedValue = input.nextInt();
+            System.out.print("Which value of card do you want from " + players.get(playerAndValue[0]).getPlayerID() + "? (1-13) ");
+            playerAndValue[1] = input.nextInt();
 
-            if (selectedValue >= 1 && selectedValue <= 13) {
-                return selectedValue;
+            if (playerAndValue[1] >= 1 && playerAndValue[1] <= 13) {
+                break;
             } else {
                 System.out.println("\nPlease enter a valid card value.");
             }
         }
-
+        
+        return playerAndValue;
+        
     }
 
     /**
