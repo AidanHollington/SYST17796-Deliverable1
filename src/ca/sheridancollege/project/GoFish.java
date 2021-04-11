@@ -15,7 +15,6 @@ public class GoFish extends Game {
     MenuSystem menuSystem = new MenuSystem();
 
     // instance variables
-    private int numOfPlayers;
     private final int handSize;
     private int cardsInPool = 52;
 
@@ -37,8 +36,8 @@ public class GoFish extends Game {
     // determines if the game is active
     private boolean gameActive = true;
 
-    // the players of the game
-    public ArrayList<Player> players;
+    // create ArrayList to hold each player's information
+    public ArrayList<Player> players = new ArrayList();
 
     // list of possible suits
     private final String[] SUITS = {"Hearts", "Diamonds", "Spades", "Clubs"};
@@ -54,9 +53,6 @@ public class GoFish extends Game {
         super("GoFish", handSize);
         this.handSize = handSize;
 
-        // create ArrayList to hold each player's information
-        this.players = new ArrayList();
-
     }
 
     /**
@@ -66,9 +62,6 @@ public class GoFish extends Game {
      * @param playerNames String array containing names of each player
      */
     public void setup(String[] playerNames) {
-        // set variable for number of players
-        this.numOfPlayers = playerNames.length;
-
         for (String playerName : playerNames) {
             this.players.add(new Player(playerName, this.handSize));
         }
@@ -123,6 +116,8 @@ public class GoFish extends Game {
 
             // print how many cards are remaining in the pool
             System.out.println(this.cardsInPool + " card(s) remaining in pool.");
+            // line break
+            System.out.println();
 
             // enter mainMenu system
             option = menuSystem.mainMenu(this.players, this.currentPlayer, input);
@@ -192,7 +187,7 @@ public class GoFish extends Game {
     }
 
     /**
-     * Adds a card with a specified suit and value to a specified player
+     * Adds all cards from a Card ArrayList to a specified player
      *
      * @author aidanhollington
      * @param cards ArrayList containing Card objects
@@ -306,6 +301,17 @@ public class GoFish extends Game {
             return false;
         }
 
+    }
+
+    /**
+     * Return a card at a specified index from a specified player's deck
+     *
+     * @param source which player from the group to read from
+     * @param index which index to return
+     * @return card at specified index of specified players hand
+     */
+    public Card getCardAtIndex(int source, int index) {
+        return this.players.get(source).cards.get(index);
     }
 
     /**
